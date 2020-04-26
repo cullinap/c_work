@@ -36,6 +36,26 @@ void FindWord(char *word , char *file) {
     free(line);
 }
 
+void Iterate_Through_Files(char *term, char *file_type)
+{
+	DIR *p;
+  	struct dirent *pp;     
+  	p = opendir ("./");
+  	
+    if (p != NULL) {
+    	
+       	while (( pp = readdir(p)) !=NULL ) {
+      		int length = strlen(pp->d_name);
+      		if (strncmp(pp->d_name + length - 4, file_type, 4) == 0) {
+      	  		puts(pp->d_name);
+          		FindWord(term, pp->d_name);
+        	}
+      	}
+
+      	(void) closedir (p);
+    } 
+}
+
 
 int main(int argc, char *argv[]) 
 { 
@@ -43,28 +63,11 @@ int main(int argc, char *argv[])
   	die("provide the term you wish to search for");
 
   int i = 0;
+  char *f_type = ".txt";
 
   for (i=1; i < argc; i++) {
-
-  	DIR *p;
-  	struct dirent *pp;     
-  	p = opendir ("./");
-  	
-    if (p != NULL)
-    {
-    	
-       	while (( pp = readdir(p)) !=NULL ) {
-      		int length = strlen(pp->d_name);
-      		if (strncmp(pp->d_name + length - 4, ".txt", 4) == 0) {
-      	  		puts(pp->d_name);
-          		FindWord(argv[i], pp->d_name);
-        	}
-      	}
-
-      	(void) closedir (p);
-    	} 
-  	}
-
+  	Iterate_Through_Files(argv[i], f_type);
+  }
 
 } 
 
