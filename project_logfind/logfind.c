@@ -2,6 +2,19 @@
 #include <string.h>
 #include <stdlib.h> // explicit def of malloc
 #include <dirent.h>
+#include <errno.h>
+
+void die(const char *message)
+{
+	if (errno) {
+		perror(message);
+	} else {
+		printf("ERROR: %s\n", message);
+	}
+
+	exit(1);
+}
+
 
 void FindWord(char *word , char *file) {
     char *line = NULL;
@@ -24,25 +37,35 @@ void FindWord(char *word , char *file) {
 }
 
 
-int main(void) 
+int main(int argc, char *argv[]) 
 { 
+  if (argc < 1)
+  	die("provide the term you wish to search for");
 
-  DIR *p;
-  struct dirent *pp;     
-  p = opendir ("./");
+  int i = 0;
 
-  if (p != NULL)
-  {
-    while ((pp = readdir (p))!=NULL) {
-      int length = strlen(pp->d_name);
-      if (strncmp(pp->d_name + length - 4, ".txt", 4) == 0) {
-      	  puts(pp->d_name);
-          FindWord("text", pp->d_name);
-      }
-    }
+  for (i=1; i < argc; i++) {
 
-    (void) closedir (p);
-  } 
+  	DIR *p;
+  	struct dirent *pp;     
+  	p = opendir ("./");
+  	
+    if (p != NULL)
+    {
+    	
+       	while (( pp = readdir(p)) !=NULL ) {
+      		int length = strlen(pp->d_name);
+      		if (strncmp(pp->d_name + length - 4, ".txt", 4) == 0) {
+      	  		puts(pp->d_name);
+          		FindWord(argv[i], pp->d_name);
+        	}
+      	}
+
+      	(void) closedir (p);
+    	} 
+  	}
+
+
 } 
 
 
