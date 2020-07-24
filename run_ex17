@@ -1,0 +1,14 @@
+#echo Enter database name:
+
+#read var
+
+if [ -e data3.txt ]; then
+	echo adding to database
+	for i in {0..101}
+	do
+		./ex17 data3.txt s $i pat pat@pat.com
+	done
+else
+	echo making file
+	./ex17 data3.txt c
+fi

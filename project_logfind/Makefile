@@ -1,7 +1,5 @@
 CFLAGS=-Wall -g 
 
-# all: ex1 ex3
-
-# clean:
-
-# 	rm -f ex1 ex3
+all: logfind
+	./logfind || true
+	./logfind test test test

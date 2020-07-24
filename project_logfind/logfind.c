@@ -3,17 +3,7 @@
 #include <stdlib.h> // explicit def of malloc
 #include <dirent.h>
 #include <errno.h>
-
-void die(const char *message)
-{
-	if (errno) {
-		perror(message);
-	} else {
-		printf("ERROR: %s\n", message);
-	}
-
-	exit(1);
-}
+#include "dbg.h"
 
 
 void FindWord(char *word , char *file) {
@@ -26,7 +16,7 @@ void FindWord(char *word , char *file) {
     {
     	ctr++;
 
-        if (strstr(line , word ) != NULL)
+        if (strstr(line , word) != NULL)
         {
              printf("'%s' appears on line %d\n", word, ctr);
         }
@@ -59,8 +49,7 @@ void Iterate_Through_Files(char *term, char *file_type)
 
 int main(int argc, char *argv[]) 
 { 
-  if (argc < 1)
-  	die("provide the term you wish to search for");
+  check(argc > 2, "USAGE: logind word word word")
 
   int i = 0;
   char *f_type = ".txt";
@@ -68,6 +57,9 @@ int main(int argc, char *argv[])
   for (i=1; i < argc; i++) {
   	Iterate_Through_Files(argv[i], f_type);
   }
+
+error:
+	return 1;
 
 } 
 
